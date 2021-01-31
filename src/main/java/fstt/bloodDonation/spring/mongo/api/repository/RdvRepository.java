@@ -1,0 +1,9 @@
+package fstt.bloodDonation.spring.mongo.api.repository;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import fstt.bloodDonation.spring.mongo.api.model.Rdv;
+
+public interface RdvRepository extends MongoRepository<Rdv, Integer>{
+
+}

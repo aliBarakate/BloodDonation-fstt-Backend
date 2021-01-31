@@ -19,6 +19,9 @@ public class Rdv {
 	private int id;
 	private Date DateVaccin;
 	private String Lieu;
+	private Donneur donneur;
+	private Receveur receveur;
+	private Medecin medecin;
 
 	public int getId() {
 		return id;
@@ -38,6 +41,25 @@ public class Rdv {
 	public void setLieu(String lieu) {
 		Lieu = lieu;
 	}
-
+	public Donneur getDonneur() {
+		return donneur;
+	}
+	public void setDonneur(Donneur donneur) {
+		this.donneur = donneur;
+	}
+	public Receveur getReceveur() {
+		return receveur;
+	}
+	public void setReceveur(Receveur receveur) {
+		this.receveur = receveur;
+	}
+	public Medecin getMedecin() {
+		return medecin;
+	}
+	public void setMedecin(Medecin medecin) {
+		this.medecin = medecin;
+	}
+	
+	
 	
 }
