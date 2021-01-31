@@ -36,7 +36,7 @@ public class DonneurController {
 		return repository.findById(id);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/deleteDonneur/{id}")
 	public String deleteDonneur(@PathVariable int id) {
 		repository.deleteById(id);
 		return "Donneur supprime avec id : " + id;

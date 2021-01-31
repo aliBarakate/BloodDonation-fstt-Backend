@@ -11,35 +11,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import fstt.bloodDonation.spring.mongo.api.model.Donneur;
-import fstt.bloodDonation.spring.mongo.api.repository.DonneurRepository;
+
+import fstt.bloodDonation.spring.mongo.api.model.Receveur;
+import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
 
 @RestController
 public class ReceveurController {
 
 	@Autowired
-	private DonneurRepository repository;
+	private ReceveurRepository repository;
 
-	@PostMapping("/addDonneur")
-	public String saveDonneur(@RequestBody Donneur donneur) {
-		repository.save(donneur);
-		return "Donneur ajote avec id : " + donneur.getId();
+	@PostMapping("/addReceveur")
+	public String saveReceveur(@RequestBody Receveur receveur) {
+		repository.save(receveur);
+		return "Receveur ajoute avec id : " + receveur.getId();
 	}
 
-	@GetMapping("/findAllDonneurs")
-	public List<Donneur> getDonneurs() {
+	@GetMapping("/findAllReceveurs")
+	public List<Receveur> getReceveur() {
 		return repository.findAll();
 	}
 
-	@GetMapping("/findAllDonneurs/{id}")
-	public Optional<Donneur> getDonneur(@PathVariable int id) {
+	@GetMapping("/findAllReceveur/{id}")
+	public Optional<Receveur> getReceveur(@PathVariable int id) {
 		return repository.findById(id);
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteDonneur(@PathVariable int id) {
+	@DeleteMapping("/deleteReceveur/{id}")
+	public String deleteReceveur(@PathVariable int id) {
 		repository.deleteById(id);
-		return "Donneur supprime avec id : " + id;
+		return "Receveur supprime avec id : " + id;
 	}
 
 }
