@@ -19,6 +19,56 @@ public class Donneur {
 	private String nom;
 	private String prenom;
 	
+	private String cin;
+	private String genre;
+	private String ville;
+	private String groupeSanguin;
+	private String tel;
+	private String mail;
+	private int compteur;
+	
+	public String getCin() {
+		return cin;
+	}
+	public void setCin(String cin) {
+		this.cin = cin;
+	}
+	public String getGenre() {
+		return genre;
+	}
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+	public String getVille() {
+		return ville;
+	}
+	public void setVille(String ville) {
+		this.ville = ville;
+	}
+	public String getGroupeSanguin() {
+		return groupeSanguin;
+	}
+	public void setGroupeSanguin(String groupeSanguin) {
+		this.groupeSanguin = groupeSanguin;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getMail() {
+		return mail;
+	}
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+	public int getCompteur() {
+		return compteur;
+	}
+	public void setCompteur(int compteur) {
+		this.compteur = compteur;
+	}
 	public int getId() {
 		return id;
 	}
