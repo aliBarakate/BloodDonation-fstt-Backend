@@ -17,15 +17,21 @@ import fstt.bloodDonation.spring.mongo.api.model.Receveur;
 import fstt.bloodDonation.spring.mongo.api.repository.MedecinRepository;
 import fstt.bloodDonation.spring.mongo.api.repository.RdvRepository;
 import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
+import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
 
 @RestController
 public class RdvController {
 
 	@Autowired
 	private RdvRepository repository;
+	
+	@Autowired
+	private SequenceGeneratorService service;
+	
 
 	@PostMapping("/addRdv")
 	public String saveRdv(@RequestBody Rdv rdv) {
+		rdv.setId(service.getSequenceNumber(Rdv.SEQUENCE_NAME));
 		repository.save(rdv);
 		return "Rdv ajoute avec id : " + rdv.getId();
 	}

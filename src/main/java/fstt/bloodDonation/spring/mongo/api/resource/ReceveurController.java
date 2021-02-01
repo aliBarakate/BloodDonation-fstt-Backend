@@ -14,15 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fstt.bloodDonation.spring.mongo.api.model.Receveur;
 import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
+import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
 
 @RestController
 public class ReceveurController {
 
 	@Autowired
 	private ReceveurRepository repository;
+	
+	@Autowired
+	private SequenceGeneratorService service;
+	
 
 	@PostMapping("/addReceveur")
 	public String saveReceveur(@RequestBody Receveur receveur) {
+		receveur.setId(service.getSequenceNumber(Receveur.SEQUENCE_NAME));
 		repository.save(receveur);
 		return "Receveur ajoute avec id : " + receveur.getId();
 	}

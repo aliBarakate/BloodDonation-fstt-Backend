@@ -3,6 +3,7 @@ package fstt.bloodDonation.spring.mongo.api.model;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -15,6 +16,8 @@ import lombok.ToString;
 
 @Document(collection = "Rdv")
 public class Rdv {
+	@Transient
+	public static final String SEQUENCE_NAME="Rdv_seq";
 	@Id
 	private int id;
 	private Date DateVaccin;

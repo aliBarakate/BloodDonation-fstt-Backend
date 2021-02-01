@@ -13,15 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fstt.bloodDonation.spring.mongo.api.model.Donneur;
 import fstt.bloodDonation.spring.mongo.api.repository.DonneurRepository;
+import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
 
 @RestController
 public class DonneurController {
 
 	@Autowired
 	private DonneurRepository repository;
+	@Autowired
+	private SequenceGeneratorService service;
+	
 
 	@PostMapping("/addDonneur")
 	public String saveDonneur(@RequestBody Donneur donneur) {
+		donneur.setId(service.getSequenceNumber(Donneur.SEQUENCE_NAME));
 		repository.save(donneur);
 		return "Donneur ajote avec id : " + donneur.getId();
 	}

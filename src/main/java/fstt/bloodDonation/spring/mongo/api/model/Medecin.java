@@ -1,6 +1,7 @@
 package fstt.bloodDonation.spring.mongo.api.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -13,6 +14,8 @@ import lombok.ToString;
 
 @Document(collection = "Medecin")
 public class Medecin {
+	@Transient
+	public static final String SEQUENCE_NAME="medecin_seq";
 	@Id
 	private int id;
 
