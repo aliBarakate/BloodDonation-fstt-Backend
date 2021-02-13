@@ -1,5 +1,6 @@
 package fstt.bloodDonation.spring.mongo.api.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +40,86 @@ public class DonneurController {
 	
 	@GetMapping("/findAllDonneursForReceveur")
 	public List<Donneur> getDonneursForReceveur(@RequestParam(name="ville")String ville,@RequestParam(name = "grpSanguin")String groupeSanguin) {
+		List<Donneur> listDonneur=new ArrayList<Donneur>();
+		listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville, groupeSanguin);
 		
+		if(listDonneur.isEmpty())
+		{
+			switch (groupeSanguin) {
+			
+			case "O_neg":
+				return listDonneur;
+			
+			case "O_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;		
+				
+			case "A_neg":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;		
+				
+			case "A_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_neg");
+				
+				if(listDonneur.isEmpty())	{		
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_pos");
+				}
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;				
+				
+			case "B_neg":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;		
+				
+			case "B_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_neg");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_pos");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;				
+				
+			case "AB_neg":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_neg");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_neg");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;				
+						
+			case "AB_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"AB_neg");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_pos");
+
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_neg");				
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_pos");
+						
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_neg");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_pos");
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
+				return listDonneur;			
+
+			}		
+			
+		}
+	
+		return listDonneur;
 		
-		return repository.findByVilleAndGroupeSanguinOrderByCompteur(ville, groupeSanguin);
 	}
 	
 
