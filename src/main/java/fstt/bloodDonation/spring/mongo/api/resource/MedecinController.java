@@ -15,39 +15,36 @@ import fstt.bloodDonation.spring.mongo.api.model.Medecin;
 import fstt.bloodDonation.spring.mongo.api.model.Receveur;
 import fstt.bloodDonation.spring.mongo.api.repository.MedecinRepository;
 import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
+import fstt.bloodDonation.spring.mongo.api.service.MedecinService;
 import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
 
 @RestController
 public class MedecinController {
 
-	@Autowired
-	private MedecinRepository repository;
 	
 	@Autowired
-	private SequenceGeneratorService service;
-	
+	private MedecinService medecinService;
 
 	@PostMapping("/addMedecin")
 	public String saveMedecin(@RequestBody Medecin medecin) {
-		medecin.setId(service.getSequenceNumber(Medecin.SEQUENCE_NAME));
-		repository.save(medecin);
-		return "Medecin ajoute avec id : " + medecin.getId();
+		return medecinService.saveMedecin(medecin);
 	}
 
 	@GetMapping("/findAllMedecins")
 	public List<Medecin> getMedecin() {
-		return repository.findAll();
+		return medecinService.getMedecin();
 	}
 
 	@GetMapping("/findAllMedecin/{id}")
 	public Optional<Medecin> getMedecin(@PathVariable int id) {
-		return repository.findById(id);
+		return medecinService.getMedecin(id);
 	}
 
 	@DeleteMapping("/deleteMedecin/{id}")
 	public String deleteMedecin(@PathVariable int id) {
-		repository.deleteById(id);
-		return "Medecin supprime avec id : " + id;
+		return medecinService.deleteMedecin(id);
 	}
+	
+	
 
 }

@@ -17,39 +17,36 @@ import fstt.bloodDonation.spring.mongo.api.model.Receveur;
 import fstt.bloodDonation.spring.mongo.api.repository.MedecinRepository;
 import fstt.bloodDonation.spring.mongo.api.repository.RdvRepository;
 import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
+import fstt.bloodDonation.spring.mongo.api.service.RdvService;
 import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
 
 @RestController
 public class RdvController {
 
-	@Autowired
-	private RdvRepository repository;
-	
-	@Autowired
-	private SequenceGeneratorService service;
-	
 
+	@Autowired
+	private RdvService rdvService;
+	
 	@PostMapping("/addRdv")
 	public String saveRdv(@RequestBody Rdv rdv) {
-		rdv.setId(service.getSequenceNumber(Rdv.SEQUENCE_NAME));
-		repository.save(rdv);
-		return "Rdv ajoute avec id : " + rdv.getId();
+		return rdvService.saveRdv(rdv);
 	}
-
+	
 	@GetMapping("/findAllRdvs")
 	public List<Rdv> getRdv() {
-		return repository.findAll();
+		return rdvService.getRdv();
 	}
 
 	@GetMapping("/findAllRdv/{id}")
 	public Optional<Rdv> getRdv(@PathVariable int id) {
-		return repository.findById(id);
+		return rdvService.getRdv(id);
 	}
 
 	@DeleteMapping("/deleteRdv/{id}")
 	public String deleteRdv(@PathVariable int id) {
-		repository.deleteById(id);
-		return "Rdv supprime avec id : " + id;
+		return rdvService.deleteRdv(id);
 	}
+	
+
 
 }

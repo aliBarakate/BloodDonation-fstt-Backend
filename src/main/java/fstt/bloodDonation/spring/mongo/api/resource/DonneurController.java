@@ -15,123 +15,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fstt.bloodDonation.spring.mongo.api.model.Donneur;
 import fstt.bloodDonation.spring.mongo.api.repository.DonneurRepository;
+import fstt.bloodDonation.spring.mongo.api.service.DonneurService;
 import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
 
 @RestController
 public class DonneurController {
 
-	@Autowired
-	private DonneurRepository repository;
-	@Autowired
-	private SequenceGeneratorService service;
 	
-
+	@Autowired
+	private DonneurService donneurService;
+	
+	
 	@PostMapping("/addDonneur")
 	public String saveDonneur(@RequestBody Donneur donneur) {
-		donneur.setId(service.getSequenceNumber(Donneur.SEQUENCE_NAME));
-		repository.save(donneur);
-		return "Donneur ajote avec id : " + donneur.getId();
+		return donneurService.saveDonneur(donneur);
 	}
-
+	
 	@GetMapping("/findAllDonneurs")
 	public List<Donneur> getDonneurs() {
-		return repository.findAll();
+		return donneurService.getDonneurs();
 	}
 	
 	@GetMapping("/findAllDonneursForReceveur")
-	public List<Donneur> getDonneursForReceveur(@RequestParam(name="ville")String ville,@RequestParam(name = "grpSanguin")String groupeSanguin) {
-		List<Donneur> listDonneur=new ArrayList<Donneur>();
-		listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville, groupeSanguin);
-		
-		if(listDonneur.isEmpty())
-		{
-			switch (groupeSanguin) {
-			
-			case "O_neg":
-				return listDonneur;
-			
-			case "O_pos":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;		
-				
-			case "A_neg":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;		
-				
-			case "A_pos":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_neg");
-				
-				if(listDonneur.isEmpty())	{		
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_pos");
-				}
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;				
-				
-			case "B_neg":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;		
-				
-			case "B_pos":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_neg");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_pos");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;				
-				
-			case "AB_neg":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_neg");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_neg");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;				
-						
-			case "AB_pos":
-				listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"AB_neg");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_pos");
-
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"A_neg");				
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_pos");
-						
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"B_neg");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_pos");
-				
-				if(listDonneur.isEmpty())			
-					listDonneur=repository.findByVilleAndGroupeSanguinOrderByCompteur(ville,"O_neg");
-				return listDonneur;			
-
-			}		
-			
-		}
-	
-		return listDonneur;
-		
+	public List<Donneur> getDonneursForReceveur(@RequestParam(name="ville")String ville,@RequestParam(name = "grpSanguin")String groupeSanguin) {		
+		return donneurService.getDonneursForReceveur(ville, groupeSanguin);
 	}
 	
-
 	@GetMapping("/findAllDonneurs/{id}")
 	public Optional<Donneur> getDonneur(@PathVariable int id) {
-		return repository.findById(id);
+		return donneurService.getDonneur(id);
 	}
-
+	
 	@DeleteMapping("/deleteDonneur/{id}")
 	public String deleteDonneur(@PathVariable int id) {
-		repository.deleteById(id);
-		return "Donneur supprime avec id : " + id;
+		return donneurService.deleteDonneur(id);
 	}
+	
+	
 
 }
