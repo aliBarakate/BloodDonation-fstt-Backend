@@ -31,6 +31,8 @@ public class Medecin {
 	private String login;
 	private String mdp;
 	
+	private String Roles;
+	
 	
 	public String getCin() {
 		return cin;
@@ -94,5 +96,13 @@ public class Medecin {
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
+	public String getRoles() {
+		return Roles;
+	}
+	public void setRoles(String roles) {
+		Roles = roles;
+	}
+	
+	
 	
 }

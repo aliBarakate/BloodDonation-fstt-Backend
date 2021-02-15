@@ -17,4 +17,6 @@ public interface DonneurService {
 	public Optional<Donneur> getDonneur(int id); 
 
 	public String deleteDonneur( int id); 
+	
+	public void SendMail(String mail);
 }

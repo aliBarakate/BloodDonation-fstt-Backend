@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -132,5 +134,30 @@ public class DonneurServiceImpl implements DonneurService {
 		repository.deleteById(id);
 		return "Donneur supprime avec id : " + id;
 	}
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
 
+	@Override
+	public void SendMail(String mail)
+	{
+		System.out.println("sending mail");
+		String textMail="Cher/Chère volantaire"
+				+ "\n Nous venons de recevoir un cas d'urgence "
+				+ "qui a besoin de votre don de sang.\n "
+				+ "Ce cas est hospitalisé à l'hopital xxxxxxx.\n"
+				+ "Adresse:xxxxxxxxxxxxxx\n"
+				+ "\n Veuillez repondre le plus tot possible à cette demande .\n"				
+				+ "Merci d'aider à sauver une vie ,merci d'offrir votre sang\n";
+		
+		SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
+		simpleMailMessage.setFrom("java-master@gmail.com");
+		simpleMailMessage.setTo(mail);
+		simpleMailMessage.setSubject("BloodDonation_Appel d'urgence");
+		simpleMailMessage.setText(textMail);
+		javaMailSender.send(simpleMailMessage);
+		System.out.println("sent mail");
+	}
+	
+	
 }

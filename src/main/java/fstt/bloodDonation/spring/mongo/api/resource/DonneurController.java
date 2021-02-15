@@ -51,6 +51,12 @@ public class DonneurController {
 		return donneurService.deleteDonneur(id);
 	}
 	
+	@GetMapping("/sendmail")
+	public void Sendmail(@RequestParam(name="mail")String mail) {
+		donneurService.SendMail(mail);
+	}
+	
+	
 	
 
 }
