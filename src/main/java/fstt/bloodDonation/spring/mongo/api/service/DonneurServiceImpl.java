@@ -158,6 +158,49 @@ public class DonneurServiceImpl implements DonneurService {
 		javaMailSender.send(simpleMailMessage);
 		System.out.println("sent mail");
 	}
+
+	@Override
+	public Donneur getByCin(String cin) {
+		// TODO Auto-generated method stub
+		return repository.findByCin(cin);
+	}
+
+	@Override
+	public String deleteByCin(String cin) {
+		// TODO Auto-generated method stub
+		Donneur d=repository.findByCin(cin);
+		int id=d.getId();
+		repository.deleteById(id);
+		return "Donneur supprime avec cin : " + cin;
+		
+	}
+
+	@Override
+	public String updateDonneurByCin (String cin,String grpSanguin) {
+		// TODO Auto-generated method stub
+		Donneur d=repository.findByCin(cin);
+		d.setGroupeSanguin(grpSanguin);
+		repository.save(d);
+		return "Donneur avec cin : " + cin+" est mis a jour";
+	}
+
+	@Override
+	public String updateDonneur(Donneur d) {
+		// TODO Auto-generated method stub
+		
+		Donneur DonneurUpdated =repository.findById(d.getId()).get();
+		DonneurUpdated.setCin(d.getCin());
+		DonneurUpdated.setGenre(d.getGenre());
+		DonneurUpdated.setMail(d.getMail());
+		DonneurUpdated.setNom(d.getNom());
+		DonneurUpdated.setPrenom(d.getPrenom());
+		DonneurUpdated.setTel(d.getTel());
+		DonneurUpdated.setVille(d.getVille());
+		DonneurUpdated.setGroupeSanguin(d.getGroupeSanguin());
+		repository.save(DonneurUpdated);
+		
+		return "Donneur mis a jour";
+	}
 	
 	
 }

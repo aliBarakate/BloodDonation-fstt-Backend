@@ -19,4 +19,13 @@ public interface DonneurService {
 	public String deleteDonneur( int id); 
 	
 	public void SendMail(String mail);
+	
+	public Donneur getByCin(String cin);
+	
+	public String deleteByCin(String cin);
+	
+	public String updateDonneurByCin(String cin,String grpSanguin);
+	
+	public String updateDonneur(Donneur d);
+	
 }

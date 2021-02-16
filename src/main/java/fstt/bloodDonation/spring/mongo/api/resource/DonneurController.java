@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,12 @@ public class DonneurController {
 	private DonneurService donneurService;
 	
 	
+
+	@GetMapping("/findDonneurbyCin/{cin}")
+	public Donneur getByCin(@PathVariable String cin) {
+		return donneurService.getByCin(cin);
+	}
+
 	@PostMapping("/addDonneur")
 	public String saveDonneur(@RequestBody Donneur donneur) {
 		return donneurService.saveDonneur(donneur);
@@ -56,7 +63,20 @@ public class DonneurController {
 		donneurService.SendMail(mail);
 	}
 	
+	@DeleteMapping("/deleteByCin/{cin}")
+	public String deleteByCin(@PathVariable String cin) {
+		return donneurService.deleteByCin(cin);
+	}
 	
+	@PutMapping("/updateDonneurByCin")
+	public String updateDonneurByCin(@RequestParam(name="cin")String cin,
+								@RequestParam(name="grpSanguin") String grpSanguin) {
+		return donneurService.updateDonneurByCin(cin, grpSanguin);
+	}
 	
-
+	@PutMapping("/updateDonneur")
+	public String updateDonneur(@RequestBody Donneur d) {
+		return donneurService.updateDonneur(d);
+	}
+	
 }
