@@ -1,6 +1,7 @@
 package fstt.bloodDonation.spring.mongo.api.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fstt.bloodDonation.spring.mongo.api.model.Donneur;
+import fstt.bloodDonation.spring.mongo.api.model.Rdv;
 import fstt.bloodDonation.spring.mongo.api.repository.DonneurRepository;
+import fstt.bloodDonation.spring.mongo.api.repository.RdvRepository;
 
 @Service
 public class DonneurServiceImpl implements DonneurService {
@@ -26,11 +29,36 @@ public class DonneurServiceImpl implements DonneurService {
 	@Autowired
 	private SequenceGeneratorService service;
 	
+	
+	@Autowired
+	private RdvRepository Rdvrepository;
+	
+	@Autowired
+	private SequenceGeneratorService Rdvservice;
+
+	/*
+	 * @Override
+	public String saveRdv(Rdv rdv) {
+		rdv.setId(service.getSequenceNumber(Rdv.SEQUENCE_NAME));
+		repository.save(rdv);
+		return "Rdv ajoute avec id : " + rdv.getId();
+	}
+	 */
+	
 
 	@Override
 	public String saveDonneur(Donneur donneur) {
 		donneur.setId(service.getSequenceNumber(Donneur.SEQUENCE_NAME));
 		repository.save(donneur);
+		
+		int idRdv=Rdvservice.getSequenceNumber(Rdv.SEQUENCE_NAME);
+		String lieuRdv="Centre National de Transfusion Sanguine de "+donneur.getVille();
+		Date dateRdv=new Date();
+		
+		Rdv rdv=new Rdv(idRdv, dateRdv, lieuRdv, donneur);
+		
+		Rdvrepository.save(rdv);
+		
 		return "Donneur ajote avec id : " + donneur.getId();
 	}
 

@@ -20,23 +20,43 @@ public class Rdv {
 	public static final String SEQUENCE_NAME="Rdv_seq";
 	@Id
 	private int id;
-	private Date DateVaccin;
+	private Date DateRdv;
 	private String Lieu;
 	private Donneur donneur;
-	private Receveur receveur;
-	private Medecin medecin;
+	//private Medecin medecin;
+
+	
+	
+	public Rdv(int id, Date dateRdv, String lieu, Donneur donneur) {
+		super();
+		this.id = id;
+		DateRdv = dateRdv;
+		Lieu = lieu;
+		this.donneur = donneur;
+	}
+
+
+
+	public Rdv() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getDateVaccin() {
-		return DateVaccin;
+	
+	public Date getDateRdv() {
+		return DateRdv;
 	}
-	public void setDateVaccin(Date dateVaccin) {
-		DateVaccin = dateVaccin;
+	public void setDateRdv(Date dateRdv) {
+		DateRdv = dateRdv;
 	}
 	public String getLieu() {
 		return Lieu;
@@ -50,19 +70,13 @@ public class Rdv {
 	public void setDonneur(Donneur donneur) {
 		this.donneur = donneur;
 	}
-	public Receveur getReceveur() {
-		return receveur;
-	}
-	public void setReceveur(Receveur receveur) {
-		this.receveur = receveur;
-	}
-	public Medecin getMedecin() {
+	
+	/*public Medecin getMedecin() {
 		return medecin;
 	}
 	public void setMedecin(Medecin medecin) {
 		this.medecin = medecin;
 	}
-	
-	
+	*/	
 	
 }
