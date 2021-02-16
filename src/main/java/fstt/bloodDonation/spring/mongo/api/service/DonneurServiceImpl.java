@@ -1,6 +1,8 @@
 package fstt.bloodDonation.spring.mongo.api.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,16 +40,43 @@ public class DonneurServiceImpl implements DonneurService {
 	
 	@Autowired
 	private SequenceGeneratorService Rdvservice;
-
-	/*
-	 * @Override
-	public String saveRdv(Rdv rdv) {
-		rdv.setId(service.getSequenceNumber(Rdv.SEQUENCE_NAME));
-		repository.save(rdv);
-		return "Rdv ajoute avec id : " + rdv.getId();
-	}
-	 */
 	
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+	@Bean
+	public JavaMailSender getJavaMailSender() {
+	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+	    mailSender.setHost("smtp.gmail.com");
+	    mailSender.setPort(587);
+	    
+	    mailSender.setUsername("blooddonationmorocco@gmail.com");
+	    mailSender.setPassword("blood123donation");
+	    
+	    Properties props = mailSender.getJavaMailProperties();
+	    props.put("mail.transport.protocol", "smtp");
+	    props.put("mail.smtp.auth", "true");
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.debug", "true");
+	    props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+	    
+	    return mailSender;
+	}
+	
+	public void fctMail(String mail,String textMail,String sujet)
+	{
+		System.out.println("sending mail");		
+		SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
+		simpleMailMessage.setFrom("java-master@gmail.com");
+		simpleMailMessage.setTo(mail);
+		simpleMailMessage.setSubject(sujet);
+		simpleMailMessage.setText(textMail);
+		javaMailSender.send(simpleMailMessage);
+		System.out.println("sent mail");
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public String saveDonneur(Donneur donneur) {
@@ -55,14 +84,33 @@ public class DonneurServiceImpl implements DonneurService {
 		repository.save(donneur);
 		
 		int idRdv=Rdvservice.getSequenceNumber(Rdv.SEQUENCE_NAME);
-		String lieuRdv="Centre National de Transfusion Sanguine de "+donneur.getVille();
-		Date dateRdv=new Date();
-		
-		Rdv rdv=new Rdv(idRdv, dateRdv, lieuRdv, donneur);
-		
+		String lieuRdv="Centre National de Transfusion Sanguine de "+donneur.getVille();		
+		Date dateRdv=new Date();		
+		int mois=dateRdv.getMonth()+1;
+		if(mois==13)mois=01;
+		dateRdv.setMonth(mois);
+		Rdv rdv=new Rdv(idRdv, dateRdv, lieuRdv, donneur);		
 		Rdvrepository.save(rdv);
 		
-		return "Donneur ajote avec id : " + donneur.getId();
+
+		SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
+	    String date=formater.format(dateRdv);
+	    
+	    String textMail="Cher/Chère volantaire"
+				+ "\n Nous avons reçu votre demande d'inscription pour faire "
+				+ "partie de cette merveilleuse communaute.\n"
+				+ "Afin de completer votre inscription\n "
+				+ "Nous vous donnons rendez-vous le  "+date
+				+"  au  "+lieuRdv
+				+ "  pour faire quelques analyses gartuitement. "
+				
+				+ "\n Merci d'aider à sauver une vie ,merci d'offrir votre sang !\n";
+	    
+	    String sujet="BloodDonation_Rendez_vous";
+		
+	    fctMail(donneur.getMail(),textMail,sujet);
+	    
+		return "Donneur ajoute avec id : " + donneur.getId();
 	}
 
 	@Override
@@ -166,32 +214,12 @@ public class DonneurServiceImpl implements DonneurService {
 		return "Donneur supprime avec id : " + id;
 	}
 	
-	@Autowired
-	private JavaMailSender javaMailSender;
 	
-	@Bean
-	public JavaMailSender getJavaMailSender() {
-	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-	    mailSender.setHost("smtp.gmail.com");
-	    mailSender.setPort(587);
-	    
-	    mailSender.setUsername("blooddonationmorocco@gmail.com");
-	    mailSender.setPassword("blood123donation");
-	    
-	    Properties props = mailSender.getJavaMailProperties();
-	    props.put("mail.transport.protocol", "smtp");
-	    props.put("mail.smtp.auth", "true");
-	    props.put("mail.smtp.starttls.enable", "true");
-	    props.put("mail.debug", "true");
-	    props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-	    
-	    return mailSender;
-	}
 
 	@Override
 	public void SendMail(String mail)
 	{
-		System.out.println("sending mail");
+		
 		String textMail="Cher/Chère volantaire"
 				+ "\n Nous venons de recevoir un cas d'urgence "
 				+ "qui a besoin de votre don de sang.\n "
@@ -200,13 +228,9 @@ public class DonneurServiceImpl implements DonneurService {
 				+ "\n Veuillez repondre le plus tot possible à cette demande .\n"				
 				+ "Merci d'aider à sauver une vie ,merci d'offrir votre sang\n";
 		
-		SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
-		simpleMailMessage.setFrom("java-master@gmail.com");
-		simpleMailMessage.setTo(mail);
-		simpleMailMessage.setSubject("BloodDonation_Appel d'urgence");
-		simpleMailMessage.setText(textMail);
-		javaMailSender.send(simpleMailMessage);
-		System.out.println("sent mail");
+		String sujet="BloodDonation_Appel d'urgence";
+		
+		fctMail(mail,textMail,sujet);
 	}
 
 	@Override
