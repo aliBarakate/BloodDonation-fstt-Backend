@@ -1,5 +1,7 @@
 package fstt.bloodDonation.spring.mongo.api.model;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -30,6 +32,9 @@ public class Donneur {
 	private String tel;
 	private String mail;
 	private int compteur;
+	private int actif;
+	private Date date_derniere_donation;
+	private String adresse; 
 	
 	public String getCin() {
 		return cin;
@@ -91,4 +96,24 @@ public class Donneur {
 	public void setPrenom(String authorName) {
 		this.prenom = authorName;
 	}
+	public int getActif() {
+		return actif;
+	}
+	public void setActif(int actif) {
+		this.actif = actif;
+	}
+	public Date getDate_derniere_donation() {
+		return date_derniere_donation;
+	}
+	public void setDate_derniere_donation(Date date_derniere_donation) {
+		this.date_derniere_donation = date_derniere_donation;
+	}
+	public String getAdresse() {
+		return adresse;
+	}
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+	
+	
 }

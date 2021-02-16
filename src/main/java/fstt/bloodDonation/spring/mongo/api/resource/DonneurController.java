@@ -28,6 +28,8 @@ public class DonneurController {
 	
 	
 
+	
+
 	@GetMapping("/findDonneurbyCin/{cin}")
 	public Donneur getByCin(@PathVariable String cin) {
 		return donneurService.getByCin(cin);
@@ -78,5 +80,11 @@ public class DonneurController {
 	public String updateDonneur(@RequestBody Donneur d) {
 		return donneurService.updateDonneur(d);
 	}
+	
+	@PutMapping("/updateInactifDonneurs")
+	public String updateInactifDonneur() {
+		return donneurService.updateInactifDonneur();
+	}
+	
 	
 }

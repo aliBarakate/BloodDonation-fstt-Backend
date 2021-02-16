@@ -29,6 +29,8 @@ public class Receveur {
 	private String groupeSanguin;
 	private String tel;
 	private String mail;
+	private String hopital;
+	private String adresse;
 
 	
 	public String getCin() {
@@ -86,4 +88,19 @@ public class Receveur {
 	public void setPrenom(String authorName) {
 		this.prenom = authorName;
 	}
+	public String getHopital() {
+		return hopital;
+	}
+	public void setHopital(String hopital) {
+		this.hopital = hopital;
+	}
+	public String getAdresse() {
+		return adresse;
+	}
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+	
+	
+	
 }

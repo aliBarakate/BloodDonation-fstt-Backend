@@ -12,6 +12,12 @@ public interface DonneurRepository extends MongoRepository<Donneur, Integer>{
 	public List<Donneur> findByVilleAndGroupeSanguinOrderByCompteur(String ville,String GrpSanguin);
 
 	public Donneur findByCin(String cin);
+	
+	public List<Donneur> findByActif(int actif);
+	
+	public List<Donneur> findByVilleAndGroupeSanguinAndActifOrderByCompteur(String ville,String GrpSanguin,int Actif);
+
+
 
 	
 }

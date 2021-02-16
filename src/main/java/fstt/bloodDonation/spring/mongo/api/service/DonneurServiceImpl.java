@@ -2,7 +2,6 @@ package fstt.bloodDonation.spring.mongo.api.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import fstt.bloodDonation.spring.mongo.api.model.Donneur;
 import fstt.bloodDonation.spring.mongo.api.model.Rdv;
@@ -76,11 +70,13 @@ public class DonneurServiceImpl implements DonneurService {
 	}
 	
 	
-	/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public String saveDonneur(Donneur donneur) {
 		donneur.setId(service.getSequenceNumber(Donneur.SEQUENCE_NAME));
+		donneur.setActif(0);
+		donneur.setCompteur(0);
 		repository.save(donneur);
 		
 		int idRdv=Rdvservice.getSequenceNumber(Rdv.SEQUENCE_NAME);
@@ -118,6 +114,7 @@ public class DonneurServiceImpl implements DonneurService {
 		return repository.findAll();
 	}
 	
+	/*
 	@Override
 	public List<Donneur> getDonneursForReceveur(String ville,String groupeSanguin) {
 		List<Donneur> listDonneur=new ArrayList<Donneur>();
@@ -201,7 +198,93 @@ public class DonneurServiceImpl implements DonneurService {
 		return listDonneur;
 		
 	}
+	*/
 	
+	//findByVilleAndGroupeSanguinAndActifOrderByCompteur
+	
+	@Override
+	public List<Donneur> getDonneursForReceveur(String ville,String groupeSanguin) {
+		List<Donneur> listDonneur=new ArrayList<Donneur>();
+		listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville, groupeSanguin,1);
+		
+		if(listDonneur.isEmpty())
+		{
+			switch (groupeSanguin) {
+			
+			case "O_neg":
+				return listDonneur;
+			
+			case "O_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;		
+				
+			case "A_neg":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;		
+				
+			case "A_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"A_neg",1);
+				
+				if(listDonneur.isEmpty())	{		
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_pos",1);
+				}
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;				
+				
+			case "B_neg":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;		
+				
+			case "B_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"B_neg",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_pos",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;				
+				
+			case "AB_neg":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"A_neg",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"B_neg",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;				
+						
+			case "AB_pos":
+				listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"AB_neg",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"A_pos",1);
+
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"A_neg",1);				
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"B_pos",1);
+						
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"B_neg",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_pos",1);
+				
+				if(listDonneur.isEmpty())			
+					listDonneur=repository.findByVilleAndGroupeSanguinAndActifOrderByCompteur(ville,"O_neg",1);
+				return listDonneur;			
+
+			}		
+			
+		}
+	
+		return listDonneur;
+		
+	}
 
 	@Override
 	public Optional<Donneur> getDonneur(int id) {
@@ -254,6 +337,7 @@ public class DonneurServiceImpl implements DonneurService {
 		// TODO Auto-generated method stub
 		Donneur d=repository.findByCin(cin);
 		d.setGroupeSanguin(grpSanguin);
+		d.setActif(1);
 		repository.save(d);
 		return "Donneur avec cin : " + cin+" est mis a jour";
 	}
@@ -271,9 +355,38 @@ public class DonneurServiceImpl implements DonneurService {
 		DonneurUpdated.setTel(d.getTel());
 		DonneurUpdated.setVille(d.getVille());
 		DonneurUpdated.setGroupeSanguin(d.getGroupeSanguin());
+		DonneurUpdated.setActif(d.getActif());
+		DonneurUpdated.setDate_derniere_donation(d.getDate_derniere_donation());
 		repository.save(DonneurUpdated);
 		
 		return "Donneur mis a jour";
+	}
+
+	@Override
+	public String updateInactifDonneur() {
+		// TODO Auto-generated method stub
+		
+		List<Donneur> listdonneur=repository.findByActif(0);
+		for(Donneur d:listdonneur)
+		{
+			Date dateDonnation=d.getDate_derniere_donation();	
+			if(!dateDonnation.toString().isEmpty())
+			{
+				Date aujourdhui=new Date();
+				int mois=dateDonnation.getMonth()+1;
+				int annee=dateDonnation.getYear();
+				if(mois==13){ mois=01; annee++;}
+				dateDonnation.setMonth(mois);
+				dateDonnation.setYear(annee);
+				if(aujourdhui.after(dateDonnation)) 
+				{
+					d.setActif(1);
+					repository.save(d);
+				}
+			}
+		}
+		
+		return "Les donneurs inactifs sont mis a jours";
 	}
 	
 	

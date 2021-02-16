@@ -28,4 +28,6 @@ public interface DonneurService {
 	
 	public String updateDonneur(Donneur d);
 	
+	public String updateInactifDonneur();
+	
 }
