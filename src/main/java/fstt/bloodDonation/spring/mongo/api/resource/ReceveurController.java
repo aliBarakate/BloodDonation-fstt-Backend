@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,7 @@ import fstt.bloodDonation.spring.mongo.api.model.Receveur;
 import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
 import fstt.bloodDonation.spring.mongo.api.service.ReceveurService;
 import fstt.bloodDonation.spring.mongo.api.service.SequenceGeneratorService;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class ReceveurController {
 	

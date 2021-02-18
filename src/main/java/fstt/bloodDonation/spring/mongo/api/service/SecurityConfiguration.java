@@ -44,9 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		
 		//.antMatchers("/**").permitAll()
 		//.antMatchers("/addMedecin").permitAll()
-		.antMatchers("/updateInactifDonneurs").hasRole("ADMIN")
-		.antMatchers("/deleteByCin/{cin}").hasRole("ADMIN")
-		.antMatchers("/findAllDonneurs").hasRole("ADMIN")
+		//.antMatchers("/updateInactifDonneurs").hasRole("ADMIN")
+		//.antMatchers("/deleteByCin/{cin}").hasRole("ADMIN")
+		//.antMatchers("/findAllDonneurs").hasRole("ADMIN")
 		
 		.anyRequest().permitAll()
 		.and				()//.formLogin();
