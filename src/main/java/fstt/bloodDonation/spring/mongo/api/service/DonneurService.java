@@ -30,4 +30,6 @@ public interface DonneurService {
 	
 	public String updateInactifDonneur();
 	
+	public List<Donneur> getDonneursForReceveur(); 
+	
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import fstt.bloodDonation.spring.mongo.api.model.GroupeSanguinChart;
 import fstt.bloodDonation.spring.mongo.api.model.Receveur;
 import fstt.bloodDonation.spring.mongo.api.repository.ReceveurRepository;
 import fstt.bloodDonation.spring.mongo.api.service.ReceveurService;
@@ -22,6 +22,11 @@ public class ReceveurController {
 	
 	@Autowired
 	private ReceveurService receveurService;
+
+	@GetMapping("/Statistiques")
+	public GroupeSanguinChart Statistique() {
+		return receveurService.Statistique();
+	}
 
 	@PostMapping("/addReceveur")
 	public String saveReceveur(@RequestBody Receveur receveur) {

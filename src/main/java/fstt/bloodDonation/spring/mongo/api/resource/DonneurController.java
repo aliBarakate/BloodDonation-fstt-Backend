@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +27,7 @@ public class DonneurController {
 	@Autowired
 	private DonneurService donneurService;
 	
-	
 
-	
 
 	@GetMapping("/findDonneurbyCin/{cin}")
 	public Donneur getByCin(@PathVariable String cin) {
@@ -45,9 +44,14 @@ public class DonneurController {
 		return donneurService.getDonneurs();
 	}
 	
-	@GetMapping("/findAllDonneursForReceveur")
+	@GetMapping("/findAllDonneursForReceveurwithParam")
 	public List<Donneur> getDonneursForReceveur(@RequestParam(name="ville")String ville,@RequestParam(name = "grpSanguin")String groupeSanguin) {		
 		return donneurService.getDonneursForReceveur(ville, groupeSanguin);
+	}
+	
+	@GetMapping("/findAllDonneursForReceveur")
+	public List<Donneur> getDonneursForReceveur() {
+		return donneurService.getDonneursForReceveur();
 	}
 	
 	@GetMapping("/findAllDonneurs/{id}")
@@ -55,6 +59,7 @@ public class DonneurController {
 		return donneurService.getDonneur(id);
 	}
 	
+
 	@DeleteMapping("/deleteDonneur/{id}")
 	public String deleteDonneur(@PathVariable int id) {
 		return donneurService.deleteDonneur(id);

@@ -27,6 +27,7 @@ public class MedecinServiceImpl implements MedecinService{
 	@Override
 	public String saveMedecin(Medecin medecin) {
 		medecin.setId(service.getSequenceNumber(Medecin.SEQUENCE_NAME));
+		medecin.setRoles("ROLE_ADMIN");
 		repository.save(medecin);
 		return "Medecin ajoute avec id : " + medecin.getId();
 	}
