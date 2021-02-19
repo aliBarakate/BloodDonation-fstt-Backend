@@ -83,7 +83,7 @@ public class DonneurServiceImpl implements DonneurService {
 	@Override
 	public String saveDonneur(Donneur donneur) {
 		donneur.setId(service.getSequenceNumber(Donneur.SEQUENCE_NAME));
-		donneur.setActif(0);
+		donneur.setActif(1);
 		donneur.setCompteur(0);
 		repository.save(donneur);
 		
@@ -106,7 +106,7 @@ public class DonneurServiceImpl implements DonneurService {
 				+ "Afin de completer votre inscription\n "
 				+ "Nous vous donnons rendez-vous le  "+date
 				+"  au  "+lieuRdv
-				+ "  pour faire quelques analyses gartuitement. "
+				+ "  pour faire quelques analyses gratuitement. "
 				
 				+ "\n Merci d'aider à sauver une vie ,merci d'offrir votre sang !\n";
 	    
@@ -415,6 +415,30 @@ public class DonneurServiceImpl implements DonneurService {
 		
 
 	}
+
+	@Override
+	public void demandeAccepte(String mail) {
+		// TODO Auto-generated method stub
+		
+		Donneur d=repository.findByMail(mail);
+		d.setActif(0);
+		d.setDate_derniere_donation(new Date());
+		d.setCompteur(d.getCompteur()+1);
+		repository.save(d);
+		
+	}
+
+	@Override
+	public void ActiverDonneur(int id) {
+		// TODO Auto-generated method stub
+		Donneur d=repository.findById(id).get();
+		d.setActif(1);
+		repository.save(d);
+		
+	}
+	
+	
+	
 	
 	
 }

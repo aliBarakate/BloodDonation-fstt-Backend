@@ -32,4 +32,8 @@ public interface DonneurService {
 	
 	public List<Donneur> getDonneursForReceveur(); 
 	
+	public void demandeAccepte(String mail); 
+	
+	public void ActiverDonneur(int id);
+	
 }

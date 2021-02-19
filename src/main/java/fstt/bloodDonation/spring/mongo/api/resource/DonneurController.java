@@ -29,9 +29,12 @@ public class DonneurController {
 	private DonneurService donneurService;
 	
 
+	@PutMapping("/ActiverDonneur/{id}")
+	public void ActiverDonneur(@PathVariable int id) {
+		donneurService.ActiverDonneur(id);
+	}
 
 	@GetMapping("/findDonneurbyCin/{cin}")
-	
 	public Donneur getByCin(@PathVariable String cin) {
 		return donneurService.getByCin(cin);
 	}
@@ -67,7 +70,7 @@ public class DonneurController {
 		return donneurService.deleteDonneur(id);
 	}
 	
-	@GetMapping("/sendmail")
+	@GetMapping("/sendmailbasic")
 	public void Sendmail(@RequestParam(name="mail")String mail) {
 		donneurService.SendMail(mail);
 	}
